@@ -36,7 +36,7 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on by making the voltage LOW
+  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on by making the voltage HIGH
   Serial.println("LED is on.");
   delay(1000);                       // wait for a second
   digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
