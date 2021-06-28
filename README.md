@@ -1,2 +1,7 @@
 # ardiuno
-Arduino IDE sketches. For Arduino Uno and Raspberry Pi Pico
+## Arduino IDE sketches. 
+
+### For 
+
+* Arduino Uno 
+* Raspberry Pi Pico
