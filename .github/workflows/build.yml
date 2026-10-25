@@ -18,8 +18,8 @@ jobs:
 
       - name: Heltec ESP32 Core installeren
         run: |
-          arduino-cli core update-index --additional-urls https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series/releases/download/json/package_heltec_esp32_index.json
-          arduino-cli core install Heltec_ESP32:esp32 --additional-urls https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series/releases/download/json/package_heltec_esp32_index.json
+          arduino-cli core update-index --additional-urls https://raw.githubusercontent.com/Heltec-Aaron-Lee/WiFi_Kit_series/master/json/package_heltec_esp32_index.json
+          arduino-cli core install Heltec_ESP32:esp32 --additional-urls https://raw.githubusercontent.com/Heltec-Aaron-Lee/WiFi_Kit_series/master/json/package_heltec_esp32_index.json
 
       - name: Sketch compileren (Heltec V4)
         run: |
