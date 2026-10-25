@@ -1,0 +1,34 @@
+name: Compile Heltec V4 Blink
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code ophalen
+        uses: actions/checkout@v4
+
+      - name: Arduino CLI instellen
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Heltec ESP32 Core installeren
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install Heltec_ESP32:esp32 --additional-urls https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series/releases/download/json/package_heltec_esp32_index.json
+
+      - name: Sketch compileren (Heltec V4)
+        run: |
+          arduino-cli compile --fqbn Heltec_ESP32:esp32:heltec_wifi_lora_32_V3 ./blink
+
+      - name: Bewaar het .bin bestand als Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: blink-firmware
+          path: |
+            ./blink/**/*.bin
+            ./blink/*.bin
