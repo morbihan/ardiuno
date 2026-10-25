@@ -28,11 +28,16 @@ jobs:
       - name: Bestanden samenvoegen tot één firmware
         run: |
           ESPTOOL_PATH=$(find ~/.arduino15/packages/Heltec-esp32 -name "esptool.py" | head -n 1)
+          
+          # Zoek automatisch de juiste build-map op
+          BUILD_DIR=$(find ./Blink_Serial -name "*.ino.bootloader.bin" -exec dirname {} \;)
+          echo "Gevonden build map: $BUILD_DIR"
+          
           python3 "$ESPTOOL_PATH" --chip esp32s3 merge_bin \
-            --output ./Blink_Serial/firmware-merged.bin \
-            0x1000 ./Blink_Serial/Blink_Serial.ino.bootloader.bin \
-            0x8000 ./Blink_Serial/Blink_Serial.ino.partitions.bin \
-            0x10000 ./Blink_Serial/Blink_Serial.ino.bin
+            --output "$BUILD_DIR/firmware-merged.bin" \
+            0x1000 "$BUILD_DIR/Blink_Serial.ino.bootloader.bin" \
+            0x8000 "$BUILD_DIR/Blink_Serial.ino.partitions.bin" \
+            0x10000 "$BUILD_DIR/Blink_Serial.ino.bin"
 
       - name: Bewaar het .bin bestand als Artifact
         uses: actions/upload-artifact@v4
