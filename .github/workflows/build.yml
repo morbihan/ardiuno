@@ -30,5 +30,7 @@ jobs:
         with:
           name: blink-firmware
           path: |
-            ./Blink_Serial/**/*.bin
-            ./Blink_Serial/*.bin
+            **/*.bin
+
+
+
