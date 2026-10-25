@@ -23,7 +23,7 @@ jobs:
 
       - name: Sketch compileren (Heltec V4)
         run: |
-          arduino-cli compile --fqbn Heltec_ESP32:esp32:heltec_wifi_lora_32_V3 ./blink
+          arduino-cli compile --fqbn Heltec_ESP32:esp32:heltec_wifi_lora_32_V3 ./Blink_Serial
 
       - name: Bewaar het .bin bestand als Artifact
         uses: actions/upload-artifact@v4
