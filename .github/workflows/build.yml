@@ -29,10 +29,10 @@ jobs:
         run: |
           ESPTOOL_PATH=$(find ~/.arduino15/packages/Heltec-esp32 -name "esptool.py" | head -n 1)
           python3 "$ESPTOOL_PATH" --chip esp32s3 merge_bin \
-            -o ./Blink_Serial/firmware-merged.bin \
-            0x1000 ./Blink_Serial/*.bootloader.bin \
-            0x8000 ./Blink_Serial/*.partitions.bin \
-            0x10000 ./Blink_Serial/*.ino.bin
+            --output ./Blink_Serial/firmware-merged.bin \
+            0x1000 ./Blink_Serial/Blink_Serial.ino.bootloader.bin \
+            0x8000 ./Blink_Serial/Blink_Serial.ino.partitions.bin \
+            0x10000 ./Blink_Serial/Blink_Serial.ino.bin
 
       - name: Bewaar het .bin bestand als Artifact
         uses: actions/upload-artifact@v4
