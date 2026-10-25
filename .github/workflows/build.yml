@@ -1,54 +1,23 @@
-name: Build Heltec V4 Firmware
-
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Code ophalen
-        uses: actions/checkout@v4
-
-      - name: Python instellen
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Arduino CLI installeren
-        uses: arduino/setup-arduino-cli@v2
-
-      - name: Arduino CLI configureren en Heltec core installeren
+- name: Sketch compileren
         run: |
-          arduino-cli config init --additional-urls https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series/releases/download/0.0.9/package_heltec_esp32_index.json
-          arduino-cli core update-index
-          arduino-cli core install Heltec-esp32:esp32
-
-      - name: Sketch compileren
-        run: |
-          arduino-cli compile --fqbn Heltec-esp32:esp32:WIFI_LoLa_32_V3 ./Blink_Serial
+          arduino-cli compile --fqbn Heltec-esp32:esp32:WIFI_LoRa_32_V3 ./Blink_Serial
 
       - name: Bestanden samenvoegen tot één gemengde firmware
         run: |
-          # Zoek automatisch de juiste esptool.py op in de Heltec pakkettenmap
           ESPTOOL_PATH=$(find ~/.arduino15/packages/Heltec-esp32 -name "esptool.py" | head -n 1)
           echo "Gebruikte esptool: $ESPTOOL_PATH"
           
-          # Pad naar de build-map van de sketch
-          BUILD_DIR="./Blink_Serial/build/Heltec-esp32.esp32.WIFI_LoLa_32_V3"
+          # Let op de FQBN mapnaam (met LoRa)
+          BUILD_DIR="./Blink_Serial/build/Heltec-esp32.esp32.WIFI_LoRa_32_V3"
           
-          # Voeg de 3 bestanden samen op de juiste ESP32-S3 adressen
           python3 "$ESPTOOL_PATH" --chip esp32s3 merge_bin \
             -o "$BUILD_DIR/firmware-merged.bin" \
             0x1000 "$BUILD_DIR/"*.bootloader.bin \
             0x8000 "$BUILD_DIR/"*.partitions.bin \
             0x10000 "$BUILD_DIR/"*.ino.bin
 
-      - name: Upload alle binaries (inclusief de gecombineerde) als Artifact
+      - name: Upload alle binaries als Artifact
         uses: actions/upload-artifact@v4
         with:
           name: blink-firmware-compleet
-          path: ./Blink_Serial/build/Heltec-esp32.esp32.WIFI_LoLa_32_V3/*.bin
+          path: ./Blink_Serial/build/Heltec-esp32.esp32.WIFI_LoRa_32_V3/*.bin
