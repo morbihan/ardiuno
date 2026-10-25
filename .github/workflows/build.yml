@@ -16,15 +16,17 @@ jobs:
       - name: Arduino CLI instellen
         uses: arduino/setup-arduino-cli@v2
 
-      - name: Heltec Core installeren en Sketch compileren
+      - name: Heltec Core installeren
         run: |
           arduino-cli core update-index --additional-urls https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series/releases/download/0.0.9/package_heltec_esp32_index.json
           arduino-cli core install Heltec-esp32:esp32 --additional-urls https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series/releases/download/0.0.9/package_heltec_esp32_index.json
-          mkdir -p build
-          arduino-cli compile --fqbn Heltec-esp32:esp32:WIFI_LoLa_32_V3 --output-dir ./build --additional-urls https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series/releases/download/0.0.9/package_heltec_esp32_index.json ./Blink_Serial
+
+      - name: Sketch compileren & Binair exporteren
+        run: |
+          arduino-cli compile --fqbn Heltec-esp32:esp32:WIFI_LoLa_32_V3 --export-binaries ./Blink_Serial
 
       - name: Bewaar het .bin bestand als Artifact
         uses: actions/upload-artifact@v4
         with:
           name: blink-firmware
-          path: ./build/*.bin
+          path: ./Blink_Serial/*.bin
